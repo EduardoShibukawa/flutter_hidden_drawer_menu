@@ -24,7 +24,23 @@ class ZoomScaffold extends StatefulWidget {
 }
 
 class _ZoomScaffoldState extends State<ZoomScaffold> {
-    Widget createContentDisplay () {
+
+  MenuController menuController;
+
+  @override
+  void initState() {
+    super.initState();
+    menuController = new MenuController()
+      ..addListener(() => setState((){}));
+  }
+
+  @override
+  void dispose() {
+    menuController.dispose();
+    super.dispose();
+  }
+
+  Widget createContentDisplay () {
     return zoomAndSlideContent(
       new Container(
       decoration: new BoxDecoration(image: widget.contentScreen.background),
@@ -36,7 +52,9 @@ class _ZoomScaffoldState extends State<ZoomScaffold> {
             elevation: 0.0,
             leading: new IconButton(
               icon: new Icon(Icons.menu),
-              onPressed: () {},
+              onPressed: () {
+                menuController.toogle();
+              },
             ),
             title: new Text(
               widget.contentScreen.title,
@@ -49,10 +67,14 @@ class _ZoomScaffoldState extends State<ZoomScaffold> {
   }
 
   zoomAndSlideContent(Widget content) {
+    final slideAmount = 275.0 * menuController.percentOpen;
+    final contentScale = 1.0 - (0.2 * menuController.percentOpen);
+    final cornerRadius = 10.0 * menuController.percentOpen;
+
     return new Transform(
       transform: new Matrix4
-        .translationValues(275.0, 0.0, 0.0)
-        ..scale(0.8, 0.8),
+        .translationValues(slideAmount, 0.0, 0.0)
+        ..scale(contentScale, contentScale),
         alignment: Alignment.centerLeft,        
       child: new Container(
         decoration: new BoxDecoration(
@@ -66,7 +88,7 @@ class _ZoomScaffoldState extends State<ZoomScaffold> {
           ]
         ),
         child: new ClipRRect(
-          borderRadius: new BorderRadius.circular(10.0), 
+          borderRadius: new BorderRadius.circular(cornerRadius), 
           child: content
         ),
       )
@@ -82,4 +104,35 @@ class _ZoomScaffoldState extends State<ZoomScaffold> {
       ]      
     );
   }
+}
+
+class MenuController extends ChangeNotifier {
+  MenuState state =  MenuState.closed;
+  double percentOpen = 0.0;
+
+  open() {
+    this.state = MenuState.open;
+    this.percentOpen = 1.0;
+    notifyListeners();  
+  }
+
+  close() {
+    this.state = MenuState.closed;
+    this.percentOpen = 0.0;
+    notifyListeners();
+  }
+
+  toogle() {
+    if (this.state == MenuState.open) 
+      this.close();      
+    else if(this.state == MenuState.closed) 
+      this.open();
+  }
+}
+
+enum MenuState {
+  closing,
+  closed,
+  opening,
+  open,  
 }
