@@ -10,6 +10,30 @@ class Screen {
   Screen({this.title, this.background, this.contentBuilder});
 }
 
+typedef Widget ZoomScaffoldBuilder(
+  BuildContext context,
+  MenuController menuController
+);
+
+class ZoomScaffoldMenuController extends StatelessWidget {
+  final ZoomScaffoldBuilder builder;
+
+  ZoomScaffoldMenuController({this.builder});
+
+  getMenuController(BuildContext context) {
+    final scaffoldState = context.ancestorStateOfType(
+      new TypeMatcher<_ZoomScaffoldState>()
+    ) as _ZoomScaffoldState;
+
+    return scaffoldState.menuController;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return builder(context, getMenuController(context));
+  }
+}
+
 class ZoomScaffold extends StatefulWidget {
   final Widget menuScreen;
   final Screen contentScreen;
