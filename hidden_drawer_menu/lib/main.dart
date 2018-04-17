@@ -28,12 +28,48 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   var activeScreen = restaurantScreen;
+  var selectedMenuItemId = 'restaurant';
+
+  final menu = new Menu(    
+      items: [
+          new MenuItem(
+            id: 'restaurant', 
+            title: 'THE PADDOCK'
+          ),
+          new MenuItem(
+            id: 'other1', 
+            title: 'THE HERO',          
+          ),
+          new MenuItem(          
+            id: 'other2', 
+            title: 'HELP US GROWN',
+          ),
+          new MenuItem(
+            id: 'other3', 
+            title: 'SETTINGS',          
+          ),                                                  
+      ]);
 
   @override
   Widget build(BuildContext context) {
     return new ZoomScaffold(
-      menuScreen: new MenuScreen(),
-      contentScreen: activeScreen,
+      menuScreen: new MenuScreen(
+        menu: menu,
+        selectedItemId: this.selectedMenuItemId,
+        onMenuItemSelected: (String itemId) {
+          this.selectedMenuItemId = itemId;           
+          if (itemId == 'restaurant') {
+            setState(
+              () => this.activeScreen = restaurantScreen
+            );
+          } else {
+            setState(
+              () => this.activeScreen = otherScreen
+            );
+          }
+        },
+      ),
+      contentScreen: this.activeScreen,
     );
   }
 }
