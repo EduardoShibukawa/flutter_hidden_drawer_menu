@@ -10,7 +10,7 @@ final otherScreen = new Screen(
     colorFilter: new ColorFilter.mode(const Color(0XCC000000), BlendMode.multiply),
   ),
   contentBuilder: (BuildContext context) {
-    return new Center(
+    return new Center( 
       child: new Container(
         height: 300.0,
         child: new Padding(
