@@ -52,7 +52,7 @@ class _MenuScreenState extends State<MenuScreen> with TickerProviderStateMixin{
   }
 
   Widget createMenuItems(MenuController menuController) {    
-    final listItems = [];
+    final List<Widget> listItems = [];
     final animationIntervalDuration = 0.5;
     final perListItemDelay = menuController.state != MenuState.closing ? 0.15 : 0.0;
     for (var i = 0; i < widget.menu.items.length; i++) {

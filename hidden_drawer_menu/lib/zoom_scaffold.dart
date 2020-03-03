@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:hidden_drawer_menu/menu_screen.dart';
 
 class Screen {
   final String title;
@@ -45,10 +44,7 @@ class ZoomScaffoldMenuControllerState extends State<ZoomScaffoldMenuController> 
   }
                     
   getMenuController(BuildContext context) {
-    final scaffoldState = context.ancestorStateOfType(
-      new TypeMatcher<_ZoomScaffoldState>()
-    ) as _ZoomScaffoldState;
-
+    final scaffoldState = context.findAncestorStateOfType<_ZoomScaffoldState>();
     return scaffoldState.menuController;
   }
 
